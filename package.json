@@ -70,6 +70,7 @@
     "mongoose-autopopulate": "^0.1.0",
     "mongoose-hidden": "^0.4.1",
     "mongoose-valid8": "^0.1.1",
+    "randomatic": "^3.0.0",
     "validator": "^6.3.0"
   }
 }
