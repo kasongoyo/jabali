@@ -96,15 +96,17 @@ User.recover(recoveryToken, newPassword, done);
     + `authenticationField` {String} - Custom field name to use for authentication. Default to `email` field.  
     + `authenticationFieldProperties` {Object} - Properties(as per mongoose) of the authentication field for custom field. Default properties are field type `String`, unique, lowercase, trim and required all equal to true.  
     + `registerable` {Object} - Options specific to [registerable module](#registerable).  
-        * `autoConfirm` {Boolean} - True to automatically confirm registration, false otherwise.  
+        * `autoConfirm` {Boolean} - True to automatically confirm registration, false otherwise.
     + `lockable` {Object} - Options specific to [lockable module](#lockable).   
         * `enabled` {Boolean} - True to enable account locking feature. Default to false  
         * `maximumAllowedFailedAttempts` {Number} - Specify how many authentication attempts to allow before locking the account. Valid if disabled is false.  
         * `tokenLifeSpan` {Number} - Specify the life of unlock token in days. Default to 3 days.  
     + `confirmable` {Object} - Options specific to [confirmable module](#confirmable).  
-        * `tokenLifeSpan` {Number} - Specify the life of confirmation token in days. Default to 3 days.    
+        * `tokenLifeSpan` {Number} - Specify the life of confirmation token in days. Default to 3 days. 
+        * `tokenType` {String} - set it's value to `passcode` to support 6 digit alphanumeric confirmation token instead of default SHA256 hash token. Default is SHA256 hash token   
     + `recoverable` {Object} - Options specific to [recoverable module](#recoverable).  
-        * `tokenLifeSpan` {Number} - Specify the life of confirmation token in days. Default to 3 days.  
+        * `tokenLifeSpan` {Number} - Specify the life of confirmation token in days. Default to 3 days. 
+        * `tokenType` {String} - set it's value to `passcode` to support 6 digit alphanumeric recovary token instead of default SHA256 hash token. Default is SHA256 hash token 
     + `trackable` {Object} - Options specific to [trackable module](#trackable)
 
 ## Modules
