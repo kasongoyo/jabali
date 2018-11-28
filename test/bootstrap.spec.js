@@ -38,6 +38,7 @@ function wipe(done) {
 
 //clean database
 after(function (done) {
+    this.timeout(10000);
     //wait for mongodb background tasks
     //
     //Fix for MongoError: exception: cannot perform operation: 
