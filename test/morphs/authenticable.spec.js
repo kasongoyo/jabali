@@ -11,7 +11,7 @@ var irina = require(path.join(__dirname, '..', '..', 'index'));
 
 describe('Authenticable', function () {
 
-    describe('', function () {
+    describe('Schema Setup', function () {
         let User;
         before(function () {
             var UserSchema = new Schema({});
@@ -31,7 +31,7 @@ describe('Authenticable', function () {
     });
 
 
-    describe('', function () {
+    describe('Custom Auth Field', function () {
         let User;
         before(function () {
             var UserSchema = new Schema({});
@@ -51,36 +51,13 @@ describe('Authenticable', function () {
     });
 
 
-    describe('', function () {
+    describe('Encrypt Password', function () {
         let User;
         before(function (done) {
             var UserSchema = new Schema({});
             UserSchema.plugin(irina);
             User = mongoose.model(`User+${faker.random.number()}`, UserSchema);
             done();
-        });
-
-        it('should be able to encrypt password callback based', function (done) {
-
-            var password = faker.internet.password();
-            var email = faker.internet.email();
-
-
-            var user = new User({
-                email: email,
-                password: password
-            });
-
-            user
-                .encryptPassword(function (error, authenticable) {
-                    if (error) {
-                        done(error);
-                    } else {
-                        expect(authenticable.email).to.be.equal(email.toLowerCase());
-                        expect(authenticable.password).to.not.equal(password);
-                        done();
-                    }
-                });
         });
 
         it('should be able to encrypt password promise based', function (done) {
@@ -96,7 +73,6 @@ describe('Authenticable', function () {
             user
                 .encryptPassword()
                 .then(authenticable => {
-                    expect(authenticable.email).to.be.equal(email.toLowerCase());
                     expect(authenticable.password).to.not.equal(password);
                     done();
                 });
@@ -104,49 +80,35 @@ describe('Authenticable', function () {
     });
 
 
-    describe('', function () {
+    describe('Compare Password', function () {
         let User;
+        let authenticable;
+        const password = faker.internet.password();
         before(function (done) {
-            var UserSchema = new Schema({});
+            const UserSchema = new Schema({});
             UserSchema.plugin(irina);
             User = mongoose.model(`User+${faker.random.number()}`, UserSchema);
             done();
         });
 
-        it('should be able to compare password with hash callback based', function (done) {
-            var password = faker.internet.password();
-            var email = faker.internet.email();
+        before('', function (done) {
+            const email = faker.internet.email();
 
-            var user = new User({
+            const user = new User({
                 email: email,
                 password: password
             });
 
             user
                 .encryptPassword()
-                .then(authenticable => {
-                    return authenticable
-                        .comparePassword(password, (error, authenticable) => {
-                            expect(authenticable).to.not.be.null;
-                            done();
-                        });
+                .then(auth => {
+                    authenticable = auth;
+                    done();
                 });
         });
 
         it('should be able to compare password with hash promise based', function (done) {
-            var password = faker.internet.password();
-            var email = faker.internet.email();
-
-            var user = new User({
-                email: email,
-                password: password
-            });
-
-            user
-                .encryptPassword()
-                .then(authenticable => {
-                    return authenticable.comparePassword(password);
-                })
+            authenticable.comparePassword(password)
                 .then(authenticable => {
                     expect(authenticable).to.not.be.null;
                     done();
@@ -156,7 +118,7 @@ describe('Authenticable', function () {
 
 
 
-    describe('', function () {
+    describe('Change Password', function () {
         let User;
         before(function (done) {
             var UserSchema = new Schema({});
@@ -165,32 +127,7 @@ describe('Authenticable', function () {
             done();
         });
 
-        it('should be able to change password callback based', function (done) {
-            var password = faker.internet.password();
-            var email = faker.internet.email();
-
-            var user = new User({
-                email: email,
-                password: password
-            });
-
-            var previousPassword = user.password;
-
-            user
-                .changePassword(faker.internet.password(), function (error, authenticable) {
-                    if (error) {
-                        done(error);
-                    } else {
-                        expect(authenticable.email).to.be.equal(user.email);
-                        expect(authenticable.password).to.not.be.null;
-                        expect(authenticable.password).to.not.equal(previousPassword);
-
-                        done();
-                    }
-                });
-        });
-
-        it('should be able to change password promise based', function (done) {
+        it('should be able to change password', function (done) {
             var password = faker.internet.password();
             var email = faker.internet.email();
 
@@ -204,18 +141,16 @@ describe('Authenticable', function () {
             user
                 .changePassword(faker.internet.password())
                 .then(authenticable => {
-                    expect(authenticable.email).to.be.equal(user.email);
-                    expect(authenticable.password).to.not.be.null;
                     expect(authenticable.password).to.not.equal(previousPassword);
-
                     done();
                 });
         });
     });
 
 
-    describe('', function () {
-        let User, user, _credentials;
+    describe('Authenticate', function () {
+        let User;
+        let _credentials;
         before(function (done) {
             var UserSchema = new Schema({});
             UserSchema.plugin(irina);
@@ -234,36 +169,15 @@ describe('Authenticable', function () {
             _credentials.email = credentials.email.toLowerCase();
             User
                 .register(credentials)
-                .then(authenticable => {
-                    user = authenticable;
+                .then(() => {
                     done();
                 });
         });
 
-
-        before(function (done) {
-            User
-                .confirm(user.confirmationToken)
-                .then(authenticable => {
-                    user = authenticable;
-                    done();
-                });
-        });
-
-        it('should be able to authenticate credentials callback based', function (done) {
-            User
-                .authenticate(_credentials, (error, authenticable) => {
-                    expect(authenticable).to.not.be.null;
-                    expect(authenticable.email).to.be.equal(_credentials.email);
-                    done();
-                });
-        });
-
-        it('should be able to authenticate credentials promise based', function (done) {
+        it('should be able to authenticate credentials', function (done) {
             User
                 .authenticate(_credentials)
                 .then(authenticable => {
-                    expect(authenticable).to.not.be.null;
                     expect(authenticable.email).to.be.equal(_credentials.email);
                     done();
                 });
