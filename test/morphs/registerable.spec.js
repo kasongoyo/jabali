@@ -18,7 +18,7 @@ describe('Registerable', function () {
     });
 
 
-    describe('', function () {
+    describe('Schema Setup', function () {
         it('should have registerable attributes', function (done) {
             const User = mongoose.model('RegUser');
 
@@ -39,32 +39,11 @@ describe('Registerable', function () {
     });
 
 
-    describe('', function () {
+    describe('Register Account', function () {
         let User;
 
         before(function () {
             User = mongoose.model('RegUser');
-        });
-
-        it('should be able to register callback based style', function (done) {
-            const email = faker.internet.email();
-
-            const $credentials = {
-                email: email,
-                password: faker.internet.password()
-            };
-
-            User
-                .register($credentials, function (error, registerable) {
-                    if (error) {
-                        done(error);
-                    } else {
-                        expect(registerable.registeredAt).to.not.be.null;
-                        expect(registerable.email).to.be.equal($credentials.email.toLowerCase());
-
-                        done();
-                    }
-                });
         });
 
         it('should be able to register Promise based style', function (done) {
@@ -79,8 +58,6 @@ describe('Registerable', function () {
                 .register($credentials)
                 .then(registerable => {
                     expect(registerable.registeredAt).to.not.be.null;
-                    expect(registerable.email).to.be.equal($credentials.email.toLowerCase());
-
                     done();
                 });
         });
@@ -88,7 +65,7 @@ describe('Registerable', function () {
 
 
 
-    describe('', function () {
+    describe('Duplicate Account', function () {
         let User, email, $credentials;
 
         before(function (done) {
@@ -107,7 +84,7 @@ describe('Registerable', function () {
                 });
         });
 
-        it('should not be able to register with authentication field which is already taken', function (done) {
+        it('should not be able to register duplicate account', function (done) {
             User
                 .register($credentials)
                 .catch(error => {
@@ -120,7 +97,7 @@ describe('Registerable', function () {
     });
 
 
-    describe('', function () {
+    describe('Unregister Account', function () {
         let User, email;
 
         before(function (done) {
@@ -139,54 +116,8 @@ describe('Registerable', function () {
                 });
         });
 
-        it('should be able to unregister callback based style', function (done) {
-            User
-                .findOne({
-                    email: email.toLowerCase()
-                })
-                .exec()
-                .then(registerable => {
-                    registerable
-                        .unregister(function (error, registerable) {
-                            expect(registerable.unregisteredAt).to.not.be.null;
-                            expect(error).to.be.null;
-                            done();
-                        });
-                });
-        });
-    });
-
-
-    describe('', function () {
-        let User, email;
-
-        before(function (done) {
-            User = mongoose.model('RegUser');
-            email = faker.internet.email();
-
-            const $credentials = {
-                email: email,
-                password: faker.internet.password()
-            };
-
-            User
-                .register($credentials)
-                .then(() => {
-                    done();
-                });
-        });
-
-        it('should be able to unregister promise based', function (done) {
-
-            User
-                .findOne({
-                    email: email.toLowerCase()
-                })
-                .exec()
-                .then(registerable => {
-                    return registerable
-                        .unregister();
-                })
+        it('should be able to unregister account', function (done) {
+            User.unregister({ email: email.toLowerCase() })
                 .then(registerable => {
                     expect(registerable.unregisteredAt).to.not.be.null;
                     done();
@@ -195,14 +126,15 @@ describe('Registerable', function () {
     });
 
 
-    describe('', function () {
+    describe('Autoconfirm Account', function () {
         it('should be able to auto confirm registration', function (done) {
             const UserSchema = new Schema({});
-            UserSchema.plugin(irina, {
-                registerable: {
-                    autoConfirm: true
-                }
-            });
+            UserSchema.methods.preSignup = function () {
+                const registerable = this;
+                registerable.autoConfirm = true;
+                return registerable;
+            }
+            UserSchema.plugin(irina);
             const User = mongoose.model('RegaUser', UserSchema);
 
             const credentials = {
@@ -213,12 +145,7 @@ describe('Registerable', function () {
             User
                 .register(credentials)
                 .then(registerable => {
-                    expect(registerable.registeredAt).to.not.be.null;
-                    expect(registerable.email).to.be.equal(credentials.email.toLowerCase());
-
-                    expect(registerable.confirmationToken).to.not.be.null;
                     expect(registerable.confirmedAt).to.not.be.null;
-
                     done();
                 });
         });
