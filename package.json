@@ -1,7 +1,7 @@
 {
-  "name": "irina",
+  "name": "jabali",
   "version": "1.0.0",
-  "description": "Simple and flexible authentication workflows for mongoose",
+  "description": "Simple and flexible authentication workflows for nodejs and mongodb",
   "keywords": [
     "mongoose",
     "mongoose-plugin",
@@ -33,22 +33,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lykmapipo/irina.git"
+    "url": "https://github.com/kasongoyo/jabali"
   },
   "author": {
-    "name": "lykmapipo",
-    "email": "lallyelias87@gmail.com",
-    "url": "https://github.com/lykmapipo"
+    "name": "kasongoyo",
+    "email": "kasongoyo@gmail.com",
+    "url": "https://github.com/kasongoyo"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/lykmapipo/irina/issues"
-  },
-  "homepage": "https://github.com/lykmapipo/irina",
   "contributors": [
     {
-      "name": "lykmapipo",
-      "github": "https://github.com/lykmapipo"
+      "name": "kasongoyo",
+      "github": "https://github.com/kasongoyo"
     }
   ],
   "devDependencies": {
