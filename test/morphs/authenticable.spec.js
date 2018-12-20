@@ -108,9 +108,10 @@ describe('Authenticable', function () {
         });
 
         it('should be able to compare password with hash promise based', function (done) {
-            authenticable.comparePassword(password)
+            authenticable
+                .comparePassword(password)
                 .then(authenticable => {
-                    expect(authenticable).to.not.be.null;
+                    expect(authenticable).to.be.ok;
                     done();
                 });
         });
@@ -184,9 +185,24 @@ describe('Authenticable', function () {
         });
 
 
-        it('should throw error when authenticate credentials with invalid password', function (done) {
+        it('should fail when authenticate credentials are invalid', function (done) {
             var credentials = {
-                email: faker.internet.email().toLowerCase(),
+                email: faker.internet.email(),
+                password: faker.internet.password()
+            };
+
+            User
+                .authenticate(credentials)
+                .catch(error => {
+                    expect(error).to.exist;
+                    expect(error.message).to.equal('Incorrect email or password');
+                    done();
+                });
+        });
+
+        it('should fails when authenticate with invalid password', function (done) {
+            var credentials = {
+                email: _credentials.email,
                 password: faker.internet.password()
             };
 
