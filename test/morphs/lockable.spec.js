@@ -186,15 +186,9 @@ describe('Lockable', function () {
         });
 
 
-        it('should be able to check if account is locked', function (done) {
-            user
-                .isLocked()
-                .catch(error => {
-                    expect(error).to.exist;
-                    expect(error.message)
-                        .to.equal('Account locked. Check unlock instructions sent to you.');
-                    done();
-                });
+        it('should be able to check if account is locked', function () {
+            const isLocked = user.isLocked();
+            expect(isLocked).to.be.true;
         });
     });
 
