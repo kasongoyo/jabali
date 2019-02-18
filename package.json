@@ -1,6 +1,6 @@
 {
   "name": "jabali",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple and flexible authentication workflows for nodejs and mongodb",
   "keywords": [
     "mongoose",
