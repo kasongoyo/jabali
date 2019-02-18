@@ -112,6 +112,7 @@ describe('Recoverable', function () {
 
   describe('Recover Password', function () {
     let User;
+    
     before(function (done) {
       const UserSchema = new Schema({});
       UserSchema.plugin(irina);
@@ -122,6 +123,7 @@ describe('Recoverable', function () {
 
     it('should be able to recover account password', function (done) {
       let previousPassword;
+      const newPassword = faker.internet.password();
       User
         .register({
           email: faker.internet.email(),
@@ -139,13 +141,13 @@ describe('Recoverable', function () {
           return User
             .recover({
               recoveryToken,
-              newPassword: faker.internet.password(),
+              newPassword,
               email
             });
         })
         .then(recoverable => {
-          expect(recoverable.password).to.not.be.null;
           expect(recoverable.password).to.not.equal(previousPassword);
+          expect(recoverable.password).to.not.equal(newPassword);
           expect(recoverable.recoveredAt).to.not.be.null;
           done();
         });
