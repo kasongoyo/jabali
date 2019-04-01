@@ -1,4 +1,5 @@
 
+'use strict';
 const path = require('path');
 const Confirmable = require(path.join(__dirname, 'lib', 'confirmable'));
 const Lockable = require(path.join(__dirname, 'lib', 'lockable'));

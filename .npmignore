@@ -4,7 +4,7 @@ ssl
 *~
 .idea
 nbproject
-test
+*.spec.js
 .git
 .gitignore
 .tmp
