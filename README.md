@@ -24,7 +24,8 @@ npm i --save jabali
 
 ### Usage
 
-#### All modules
+#### Default Usage
+In the default module, jabali is plugin with all of it's modules     
 Simple example
 ```bash
 const jabali = require('jabali')
@@ -34,9 +35,11 @@ const UserSchema = new Schema({
    ...
 })
 const options = {
+   // options for authenticable module
    authenticable:{
      aliases: ['email']
    },
+   // options for confirmable module
    confirmable: {
       token_life: 7
    }
@@ -49,7 +52,11 @@ mongoose.model('User', UserSchema)
 ```
 Options is an object with key names same as module names and value of type object contain configuration per that specified module in a key.
 
-#### Customize modules
+#### Custom Usage
+Jabali can be customized by plugin only modules user requires. Please note that
+when you use jabali this way, you must plugin registerable module because all
+other modules depends on it to be functional
+
 Simple example
 
 ```bash
@@ -61,9 +68,9 @@ const UserSchema = new Schema({
 })
 
 // plugin jabali default module
-UserSchema.plugin(Authenticable,{ aliases: ['email']})
-// plugin jabali registerable module
 UserSchame.plugin(Registerable)
+// plugin jabali authentication module
+UserSchema.plugin(Authenticable,{ aliases: ['email']})
 // plugin jabali confirmable module
 UserSchame.plugin(Confirmable, { token_life: 7})
 // plugin jabali recoverable module
@@ -74,6 +81,11 @@ mongoose.model('User', UserSchema)
 
 ```
 Options are declared per each module plugin. 
+
+### Options
+In default usage, options per each module are contained in the options object
+key corresponding to module name and in custom usage each module options can 
+be passed during pluging of the specific module.
 
 ### Authenticable
 #### Options

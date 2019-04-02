@@ -57,7 +57,7 @@
     "eslint-plugin-node": "^8.0.1",
     "faker": "^3.1.0",
     "mocha": "^5.2.0",
-    "mongoose": "^4.8.6",
+    "mongoose": "^5.4.20",
     "sinon": "^7.3.0"
   },
   "dependencies": {
