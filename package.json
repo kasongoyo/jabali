@@ -2,6 +2,9 @@
   "name": "jabali",
   "version": "2.0.1",
   "description": "Simple and flexible authentication workflows for nodejs and mongodb",
+  "engines": {
+    "node": ">=7.6.0"
+  },
   "keywords": [
     "mongoose",
     "mongoose-plugin",
