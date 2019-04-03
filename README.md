@@ -11,20 +11,18 @@ Jabali is based on modularity concept and you can only use what you need. The ja
 - [Recoverable]() Module responsible for resetting account password and send reset instructions
 
 
-## Getting Started
-
-### Prerequisites
+## Prerequisites
  - [Nodejs 7.6.0 or greater](https://nodejs.org)
  - [Mongoose 4 or greater](https://mongoosejs.com/)
 
-### Installing
+## Installing
 ```bash
 npm i --save jabali
 ```
 
-### Usage
+## Usage
 
-#### Default Usage
+### Default Usage
 In the default module, jabali is plugin with all of it's modules     
 Simple example
 ```bash
@@ -52,7 +50,7 @@ mongoose.model('User', UserSchema)
 ```
 Options is an object with key names same as module names and value of type object contain configuration per that specified module in a key.
 
-#### Custom Usage
+### Custom Usage
 Jabali can be customized by plugin only modules user requires. Please note that
 when you use jabali this way, you must plugin registerable module because all
 other modules depends on it to be functional
@@ -80,12 +78,10 @@ UserSchame.plugin(Recoverable, options)
 mongoose.model('User', UserSchema)
 
 ```
-Options are declared per each module plugin. 
+Jabali options are declared per each module plugin. 
 
-### Options
-In default usage, options per each module are contained in the options object
-key corresponding to module name and in custom usage each module options can 
-be passed during pluging of the specific module.
+## Options
+Jabali plugin options should be declared per module either in default or custom usage. In default usage, options per each module are contained in the options object as value to the keys corresponding to module name and in custom usage each module options can be passed during pluging of the specific module.
 
 ### Authenticable
 #### Options
@@ -141,7 +137,48 @@ UserModel.authenticate('info@email.com', 'password')
 * `Model.passwordReset(alias, newPassword, recoveryToken)` - It reset password
 * `Instance.sendPasswordResetInstructions()` - It send out password reset instructions.
 
-### Hooks
+## Hooks
+Jabali plugin also contain hooks that can be used to add custom logics that will be triggered internal by jabali prior to various actions. 
+
+### schema.methods.preSignup
+This schema instance method will be triggered prior to user signup/registration and **It must return this instance** otherwise it break registeration. It can be used forexample to automatically confirm user from a particular domain as follows;
+
+```bash
+schema.methods.preSignup = function(){
+   const user = this;
+   const addresses = user.email.split('@');
+   if(/mydomain/i.test(addresses[1])){
+      user.autoConfirm = true;
+   }
+   return user;
+}
+```
+
+### schema.methods.sendJabaliNotification
+This schema instance method must be declared to be able to send out notification after various actions such as `sendConfirmationDetails` or `sendPasswordResetInstructions`. This function when called by jabali, it will be passed two parameters, the first parameter will be notification type and the second parameter will be an instance.
+
+**This function must return promise and should never reject if you don't want notification to affect the prior action that triggered the notification send**. If failure of notification should roll back the prior actions then you can actual reject the promise otherwise always resolve the promise. 
+
+Sample
+```bash
+schema.methods.sendJabaliNotification = function(NOTIFICATION_TYPE, instance){
+   if(NOTIFICATION_TYPE === 'CONFIRMATION_INSTRUCTIONS'){
+      return Mailer
+      .sendEmail(instance.email, instance.confirmationToken)
+      .catch(error => {
+         // Always resolve because this notification should not roll
+         // back registration action which triggered it.
+         return Promise.resolve();
+      })
+   }
+    return Promise.resolve();
+}
+```
+
+Jabali support the following notification types;
++ `CONFIRMATION_INSTRUCTIONS` - Triggered during user registration or when calling `sendConfirmationInstructions` method of confirmable
++ `PASSWORD_RESET_INSTRUCTIONS` - Triggered when password reset is executed.
+
 
 
 
