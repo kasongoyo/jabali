@@ -5,11 +5,20 @@ Jabali when plugged into mongoose schema, it extends the schema with some fields
 
 Jabali is based on modularity concept and you can only use what you need. The jabali modules are as follows;
 
+- [Registerable]() Module responsible for user sign up. It's only module which is required
 - [Authenticable]() Module to manage password management and authentication flow. 
-- [Registerable]() Module responsible for user sign up.
 - [Confirmable]() Module responsible to send emails with confirmation instructions and to verify if an account is already confirmed to sign in.
 - [Recoverable]() Module responsible for resetting account password and send reset instructions
 
+## Features
+ + User signup
+ + User login using email, phone number or any other preferred user field together with password. See `aliases` options
+ + Email and phone number validation
+ + Password validation using configurable policies such as minimum length, presence of number, capital letter etc
+ + Account confirmation work flow using email or phone number(You need to have your own setup to send token to phone or email)
+ + Password reset work flow
+ + Ability to configure time period to allow user to access resources without account confirmation. After the period expired
+   user will not be able to authenticate without account confirmation.
 
 ## Prerequisites
  - [Nodejs 7.6.0 or greater](https://nodejs.org)
@@ -23,8 +32,9 @@ npm i --save jabali
 ## Usage
 
 ### Default Usage
-In the default module, jabali is plugin with all of it's modules     
-Simple example
+In the default module, jabali is plugin with all of it's modules  
+
+Sample example
 ```bash
 const jabali = require('jabali')
 
@@ -55,7 +65,7 @@ Jabali can be customized by plugin only modules user requires. Please note that
 when you use jabali this way, you must plugin registerable module because all
 other modules depends on it to be functional
 
-Simple example
+Sample example
 
 ```bash
 const {Authenticable, Registerable, Confirmable, Recoverable} = require('jabali/modules')
@@ -80,8 +90,22 @@ mongoose.model('User', UserSchema)
 ```
 Jabali options are declared per each module plugin. 
 
-## Options
-Jabali plugin options should be declared per module either in default or custom usage. In default usage, options per each module are contained in the options object as value to the keys corresponding to module name and in custom usage each module options can be passed during pluging of the specific module.
+## Modules
+Jabali is powered by modules which can be configured by passing options to independently to each module in both default or custom usage. In default usage, options per each module are contained in the options object as value to the keys corresponding to module name and in custom usage each module options can be passed during the declaration of the specific module. Modules also add instance and static methods to the target schema to as explained below
+
+### Registerable
+#### Options
+* `email_required` {Boolean} - set if email is required.
+* `phone_required` {Boolean} - set if phone is required.
+* `password_policies` {Object} - Object with password policies 
+* `password_policies.min_length` {Number} - Set the minimum number of character passwor should have
+* `password_policies.number` {Boolean} - Set if atleast one number should be present in the password
+* `password_policies.lowercase` {Boolean} - Set if atleast one lowercase character should be present in password
+* `password_policies.uppercase` {Boolean} - Set if atleast one uppercase character should be present in password
+#### Methods
+* `Model.register(payload)` - It register an account, the different between this method and normal mongoose create method is the fact that this method register user and set password and other fields as per jabali specification. 
+* `Model.unregister(criteria)` - It unregister account
+
 
 ### Authenticable
 #### Options
@@ -115,18 +139,6 @@ UserModel.authenticate('info@email.com', 'password')
 * `Model.confirm(alias, confirmationToken)` - It calls account confirmation
 * `Instance.sendConfirmationInstructions` - It send out account confirmtion instructions. 
 
-### Registerable
-#### Options
-* `email_required` {Boolean} - set if email is required.
-* `phone_required` {Boolean} - set if phone is required.
-* `password_policies` {Object} - Object with password policies 
-* `password_policies.min_length` {Number} - Set the minimum number of character passwor should have
-* `password_policies.number` {Boolean} - Set if atleast one number should be present in the password
-* `password_policies.lowercase` {Boolean} - Set if atleast one lowercase character should be present in password
-* `password_policies.uppercase` {Boolean} - Set if atleast one uppercase character should be present in password
-#### Methods
-* `Model.register(payload)` - It register an account, the different between this method and normal mongoose create method is the fact that this method register user and set password and other fields as per jabali specification. 
-* `Model.unregister(criteria)` - It unregister account
 
 ### Recoverable
 #### Options
