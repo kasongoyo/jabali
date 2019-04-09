@@ -1,6 +1,6 @@
 {
   "name": "jabali",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Simple and flexible authentication workflows for nodejs and mongodb",
   "engines": {
     "node": ">=7.6.0"
