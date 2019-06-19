@@ -32,7 +32,7 @@
   ],
   "main": "lib/index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha lib/**/bootstrap.spec.js lib/**/*spec.js --reporter spec",
+    "test": "./node_modules/mocha/bin/mocha lib/**/bootstrap.spec.js lib/**/*spec.js --reporter spec --exit",
     "pretest": "eslint --ext .js .",
     "lint": "eslint --ext .js .",
     "lint:fix": "eslint --fix --ext .js ."
