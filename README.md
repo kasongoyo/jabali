@@ -1,5 +1,8 @@
 # Jabali
 
+[![Coverage Status](https://coveralls.io/repos/github/kasongoyo/jabali/badge.svg?branch=master)](https://coveralls.io/github/kasongoyo/jabali?branch=master)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
 Jabali is the [mongoose](https://mongoosejs.com/) plugin used as the flexible authentication solution. 
 Jabali when plugged into mongoose schema, it extends the schema with some fields based on [OpenID connect specification](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims).
 
