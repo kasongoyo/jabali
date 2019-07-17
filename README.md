@@ -106,7 +106,7 @@ mongoose.model('User', UserSchema)
 * `Model.unregister(criteria)` - It unregister account
 * `Model.authenticate(alias, password)`  
 * `Instance.changePassword(newPassword)` 
-* `Model.confirm(alias, confirmationToken)` - It calls account confirmation
+* `Model.confirm(username, confirmationToken)` - It calls account confirmation, username can either be email or phone number
 * `Instance.sendConfirmationInstructions` - It send out account confirmtion instructions. 
 * `Model.passwordReset(alias, newPassword, recoveryToken)` - It reset password
 * `Instance.sendPasswordResetInstructions()` - It send out password reset instructions.
