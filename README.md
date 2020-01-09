@@ -107,12 +107,17 @@ mongoose.model('User', UserSchema)
 * `Model.authenticate(alias, password)`  
 * `Instance.changePassword(newPassword)` 
 * `Model.confirm(username, confirmationToken)` - It calls account confirmation, username can either be email or phone number
+* `Model.sendConfirmationInstructions(username)` - It send out account confirmtion instructions. 
 * `Instance.sendConfirmationInstructions` - It send out account confirmtion instructions. 
 * `Model.passwordReset(alias, newPassword, recoveryToken)` - It reset password
 * `Instance.sendPasswordResetInstructions()` - It send out password reset instructions.
 
+## Account Confirmation Instructions
+By default, account/user registeration action automatically send account confirmation instructions. This behaviour can be disabled per user instance if `autoSendConfirmationInstructions` user property is set to `false`. When set to false, you will need to send confirmation instructions manual by calling static method `Model.sendConfirmationInstructions(username)`.  
+
+
 ## Hooks
-Jabali also contain hooks that can be used to add flexibility where by user can define custom logics/behaviours that will be in effect prior to various actions. 
+Jabali also contain hooks that can be used to add flexibility. This hooks can add custom logics/behaviours that will be in effect prior to various actions as follows.
 
 ### sendJabaliNotification
 This schema instance method should be declared for jabali to send out notifications after various actions such as `sendConfirmationDetails` or `sendPasswordResetInstructions`. This function when called, will be passed two parameters, the first parameter will be notification type and the second parameter will be an instance. 
@@ -154,6 +159,8 @@ schema.methods.preSignup = function(){
 }
 ```
 
+**Note:**  
+All hooks must be defined after this plugin is attached to the schema for them to be active.
 
 
 ## Testing
