@@ -117,16 +117,17 @@ By default, account/user registeration action automatically send account confirm
 
 
 ## Hooks
-Jabali also contain hooks that can be used to add flexibility. This hooks can add custom logics/behaviours that will be in effect prior to various actions as follows.
+Jabali also support hooks which are functions used to add custom behaviours prior or post certain actions as follows;
 
 ### sendJabaliNotification
-This schema instance method should be declared for jabali to send out notifications after various actions such as `sendConfirmationDetails` or `sendPasswordResetInstructions`. This function when called, will be passed two parameters, the first parameter will be notification type and the second parameter will be an instance. 
+This is the hook that is triggered post certain events that requires user to be notified such as on password reset request and other event as explained below. This function when called, will be passed two parameters, the first parameter will be event/notification type and the second parameter will be an accompanied event data. 
 
-Notification types can be one of the followings;
-+ `CONFIRMATION_INSTRUCTIONS` - Triggered during user registration or when calling `sendConfirmationInstructions` method of confirmable
-+ `PASSWORD_RESET_INSTRUCTIONS` - Triggered when password reset is executed.
+Notification types so far includes but not limited to the followings;
++ `CONFIRMATION_INSTRUCTIONS` - Triggered during user registration or when calling `sendConfirmationInstructions` method. An accompanied data will be schema instance
++ `PASSWORD_RESET_INSTRUCTIONS` - Triggered when password reset is executed. An accompanied data will be schema instance
 
-**This function must return promise and should never reject if you don't want notification to affect the prior action that triggered the notification send**. If failure of notification should roll back the prior actions then you can actual reject the promise otherwise always resolve the promise. 
+**Note**    
+This function must return promise and should never reject if you don't want notification to affect the prior action that triggered the notification send**. If failure of notification should roll back the prior actions then you can actual reject the promise otherwise always resolve the promise. 
 
 Example
 ```bash
