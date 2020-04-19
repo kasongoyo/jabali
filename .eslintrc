@@ -1,16 +1,20 @@
 {
     "extends": [
       "eslint:recommended",
-      "plugin:node/recommended"
+      "plugin:node/recommended",
+      "plugin:mocha/recommended"
     ],
     "plugins": [
-      "mocha"
+     
     ],
     "env": {
       "mocha": true,
       "node": true
     },
     "rules": {
-      "strict": "error"
+      "strict": "error",
+      "mocha/no-hooks-for-single-case": "off",
+      "mocha/no-setup-in-describe": 0,
+      "mocha/no-sibling-hooks": 0
     }
   }
